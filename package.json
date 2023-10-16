@@ -2,7 +2,8 @@
   "name": "snap-react-drawer",
   "version": "1.0.0",
   "description": "As easy as your fingers snap",
-  "main": "build/bundle.js",
+  "main": "build/bundle",
+  "typings": "build/bundle",
   "repository": {
     "type": "git",
     "url": "https://github.com/nasaownsky/snap-react-drawer"
