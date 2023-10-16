@@ -1,6 +1,6 @@
 {
   "name": "snap-react-drawer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "As easy as your fingers snap",
   "main": "build/bundle",
   "typings": "build/bundle",
