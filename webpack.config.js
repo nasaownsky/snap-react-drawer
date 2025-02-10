@@ -5,9 +5,10 @@ module.exports = {
   entry: "./src/index.ts",
   output: {
     path: path.join(__dirname, "/build"),
-    filename: "bundle.js",
+    filename: "index.js",
     libraryTarget: "umd",
     library: "snap-react-drawer",
+    globalObject: "this",
   },
   module: {
     rules: [

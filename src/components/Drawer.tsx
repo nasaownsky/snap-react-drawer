@@ -16,6 +16,7 @@ type Props = {
   enableOverlay?: boolean;
   duration?: number;
   position?: "left" | "right" | "top" | "bottom";
+  children: React.ReactNode;
 };
 
 const Drawer: React.FC<Props> = ({
@@ -31,22 +32,24 @@ const Drawer: React.FC<Props> = ({
   onClose,
   children,
 }) => {
-  const ref = useRef();
-  useOnClickOutside(ref, closeOnClickOutside && onClose);
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref, closeOnClickOutside ? onClose : null);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    if (typeof window !== 'undefined') {
+      document.body.style.overflow = isOpen ? "hidden" : "";
 
-    if (isOpen) {
-      setTimeout(() => setIsTransitioning(true), 0);
-    } else if (!isOpen) {
-      setTimeout(() => setIsTransitioning(false), duration);
+      if (isOpen) {
+        setTimeout(() => setIsTransitioning(true), 0);
+      } else if (!isOpen) {
+        setTimeout(() => setIsTransitioning(false), duration);
+      }
+
+      return () => {
+        document.body.style.overflow = "";
+      };
     }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
   }, [isOpen]);
 
   return createPortal(
@@ -60,12 +63,12 @@ const Drawer: React.FC<Props> = ({
     >
       <div
         className={clsx(
+          overlayClassName && overlayClassName,
           styles.drawer__overlay,
           isTransitioning &&
             isOpen &&
             enableOverlay &&
-            styles.drawer__overlay_open,
-          overlayClassName && overlayClassName
+            styles.drawer__overlay_open
         )}
         style={{
           transition: `opacity ${duration}ms ease, visibility ${duration}ms ease`,
@@ -83,10 +86,12 @@ const Drawer: React.FC<Props> = ({
         style={{ transition: `transform ${duration}ms ease` }}
       >
         <div
-          className={clsx(styles.drawer__body, bodyClassName && bodyClassName)}
+          className={clsx(bodyClassName && bodyClassName, styles.drawer__body)}
           style={{
-            width: (position === "left" || position === "right") && size,
-            height: (position === "top" || position === "bottom") && size,
+            width:
+              position === "left" || position === "right" ? size : undefined,
+            height:
+              position === "top" || position === "bottom" ? size : undefined,
           }}
           ref={ref}
         >
